@@ -1,0 +1,33 @@
+name: Cobrança Spotify Mensal
+
+on:
+  schedule:
+    # Rodar dia 5 de todo mês às 13:00 UTC (09:00 AM Manaus)
+    - cron: '0 16 5 * *'
+  
+  # Permite testar manualmente clicando no botão no GitHub
+  workflow_dispatch:
+
+jobs:
+  send-email:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout do código
+        uses: actions/checkout@v3
+
+      - name: Configurar Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: Instalar Bibliotecas
+        run: |
+          pip install -r requirements.txt
+
+      - name: Enviar Cobranças
+        env:
+          EMAIL_USER: ${{ secrets.EMAIL_USER }}
+          EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
+        run: |
+          python script.py
