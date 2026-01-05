@@ -1,3 +1,4 @@
+import json
 import smtplib
 import ssl
 import datetime
@@ -17,35 +18,17 @@ CHAVE_PIX = os.environ.get('EMAIL_USER')
 NOME_TITULAR = "Kaike Maciel"
 VALOR_INDIVIDUAL = "R$ 6.81"
 
-# --- LISTA DA FAMÍLIA ---
-ASSINANTES = [
-    {
-        "nome": "Gui",
-        "email": "g.martiins.silva15@gmail.com"
-    },
-    {
-        "nome": "Kaike",
-        "email": "kaiker.maciel@gmail.com"
-    }, 
-    {
-        "nome": "Gabriela",
-        "email": "gabriela.malveira22@gmail.com"
-    },
-    {
-        "nome": "Tay Tay",
-        "email": "taycruz424242@gmail.com"
-    },
-    {
-        "nome": "Aline",
-        "email": "aline.silmara.m@gmail.com"
-    },
-    {
-        "nome": "Tedy",
-        "email": "tedypristt@gmail.com"
-    }
-]
+lista_json = os.environ.get('LISTA_ASSINANTES')
+
+if lista_json:
+    ASSINANTES = json.loads(lista_json)
+else:
+    print("ERRO: Nenhuma lista de assinantes encontrada nas variáveis de ambiente.")
+    ASSINANTES = []
 
 def enviar_cobranca():
+    if not ASSINANTES:
+        return
     # Pega o mês atual para o assunto do e-mail
     meses = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", 
              "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"]
@@ -75,7 +58,7 @@ def enviar_cobranca():
                         <p style="margin: 5px 0;"><strong>Titular:</strong> {NOME_TITULAR}</p>
                     </div>
 
-                    <p>Se já pagou, desconsidere este e-mail. Vamos continuar ouvindo música sem anúncios! 🎧</p>
+                    <p>Se já pagou, desconsidere este e-mail</p>
                     
                     <p style="font-size: 12px; color: #777;">Bot de Cobrança Automática</p>
                   </body>
