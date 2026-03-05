@@ -29,5 +29,6 @@ jobs:
         env:
           EMAIL_USER: ${{ secrets.EMAIL_USER }}
           EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
+          LISTA_ASSINANTES: ${{secrets.LISTA_ASSINANTES}}
         run: |
           python script.py
